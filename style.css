@@ -153,3 +153,75 @@ input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px
 }
 
 footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); margin-top: 50px; color: #777; }
+
+
+/* --- Final Responsive Fixes (Mobile & Tablet) --- */
+
+@media (max-width: 768px) {
+    /* 1. About Image Fix */
+    .about-pic {
+        width: 90% !important; /* Screen er baire jabe na */
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .image-divider {
+        padding: 20px 5%;
+        overflow: hidden; /* Screen er baire jete dibe na */
+    }
+
+    /* 2. Contact Section Fix (Laptop e side-by-side, Mobile e upore-niche) */
+    .contact-card {
+        display: flex;
+        flex-direction: column; /* Side-by-side bad diye upore-niche hobe */
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .contact-details {
+        text-align: left;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        width: 100%;
+    }
+
+    .form-group {
+        flex-direction: column; /* Name and Email upore niche hobe */
+        gap: 0;
+    }
+
+    /* 3. Global Overflow Fix (Jeno page daime-baime na nore) */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+    }
+
+    section {
+        padding: 60px 5%; /* Side space ektu komano hoyeche mobile er jonno */
+    }
+
+    /* 4. Skill Bar Mobile Text Fix */
+    .fill-3d span {
+        font-size: 12px;
+        top: -25px;
+    }
+}
+
+/* Extra Small Devices (Phone) */
+@media (max-width: 480px) {
+    .name {
+        font-size: 1.8rem; /* Name ektu choto hobe */
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-right {
+        padding: 20px;
+    }
+        }
