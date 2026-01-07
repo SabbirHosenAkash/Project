@@ -1,5 +1,21 @@
-// --- 1. Typing Effect (আপনার হিরো সেকশনের জন্য) ---
-const textArray = ["Bangladeshi Musician", "Creative Writer", "Web Developer", "SEO Expert"];
+/**
+ * Sabbir Hosen Akash - Final Integrated Script
+ */
+
+// --- ১. পেজ লোডার (Skeleton Loader) হ্যান্ডলিং ---
+// সাইট পুরোপুরি লোড হওয়ার পর লোডারটি ভ্যানিশ হবে
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader-wrapper');
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500);
+    }
+});
+
+// --- ২. টাইপিং ইফেক্ট (Typing Effect) ---
+const textArray = ["Bangladeshi Musician", "Creative Writer", "Web Developer", "SEO Expert", "Professional Keyboardist"];
 let textIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -18,11 +34,11 @@ function typeEffect() {
         charIndex++;
     }
 
-    let typeSpeed = isDeleting ? 80 : 150;
+    let typeSpeed = isDeleting ? 60 : 150;
 
     if (!isDeleting && charIndex === currentText.length) {
         isDeleting = true;
-        typeSpeed = 2000; // লেখা শেষে ২ সেকেন্ড বিরতি
+        typeSpeed = 2000; // লেখা শেষ হওয়ার পর ২ সেকেন্ড অপেক্ষা
     } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         textIndex = (textIndex + 1) % textArray.length;
@@ -32,30 +48,59 @@ function typeEffect() {
     setTimeout(typeEffect, typeSpeed);
 }
 
-// --- 2. Initialize AOS (Scroll Animation) ---
-AOS.init({
-    duration: 1000,
-    once: true,
-    mirror: false
+// --- ৩. মোবাইল মেনু টগল (Navbar Logic) ---
+function toggleMenu() {
+    const navLinks = document.getElementById('nav-links');
+    if (navLinks) {
+        navLinks.classList.toggle('active');
+    }
+}
+
+// মেনুর লিঙ্কে ক্লিক করলে মেনু অটোমেটিক বন্ধ হয়ে যাবে (মোবাইলের জন্য)
+document.querySelectorAll('#nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        const navLinks = document.getElementById('nav-links');
+        if (navLinks) navLinks.classList.remove('active');
+    });
 });
 
-// --- 3. Swiper JS (Project Section Slider) ---
+// --- ৪. ৩ডি স্কিল বার এনিমেশন (Skill Bar Animation on Scroll) ---
+const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const progressBars = entry.target.querySelectorAll('.fill-3d');
+            progressBars.forEach(bar => {
+                // CSS ভ্যারিয়েবল --width থেকে মান নিয়ে উইডথ সেট করা
+                const targetWidth = bar.style.getPropertyValue('--width');
+                bar.style.width = targetWidth;
+            });
+        }
+    });
+}, { threshold: 0.3 });
+
+const skillSection = document.getElementById('skills');
+if (skillSection) {
+    skillObserver.observe(skillSection);
+}
+
+// --- ৫. Swiper JS (প্রজেক্ট স্লাইডার) ---
+// স্লাইডারটি যেন ৩ডি এবং অটোমেটিক চলে
 const swiper = new Swiper('.project-slider', {
     loop: true,
     autoplay: {
-        delay: 3000,
+        delay: 3500,
         disableOnInteraction: false,
     },
     pagination: {
         el: '.swiper-pagination',
         clickable: true,
     },
-    effect: 'coverflow', // ৩ডি লুকের জন্য
+    effect: 'coverflow',
     grabCursor: true,
     centeredSlides: true,
     slidesPerView: 'auto',
     coverflowEffect: {
-        rotate: 50,
+        rotate: 30,
         stretch: 0,
         depth: 100,
         modifier: 1,
@@ -63,63 +108,38 @@ const swiper = new Swiper('.project-slider', {
     },
 });
 
-// --- 4. 3D Skill Bar Animation on Scroll ---
-const skillSection = document.getElementById('skills');
-const progressBars = document.querySelectorAll('.fill-3d');
-
-function showProgress() {
-    progressBars.forEach(progressBar => {
-        const value = progressBar.style.getPropertyValue('--width');
-        progressBar.style.width = value;
-    });
-}
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            showProgress();
-        }
-    });
-}, { threshold: 0.5 });
-
-if (skillSection) {
-    observer.observe(skillSection);
-}
-
-// --- 5. Mobile Menu Logic ---
-function toggleMenu() {
-    const navLinks = document.getElementById('nav-links');
-    navLinks.classList.toggle('active');
-}
-
-// মেনু লিঙ্কে ক্লিক করলে মেনু ক্লোজ হওয়া
-document.querySelectorAll('#nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        document.getElementById('nav-links').classList.remove('active');
-    });
+// --- ৬. AOS (Scroll Animation) ইনিশিয়ালাইজেশন ---
+AOS.init({
+    duration: 1000,
+    once: true,
+    offset: 100
 });
 
-// --- 6. Particles JS Config ---
-if (typeof particlesJS !== 'undefined') {
+// --- ৭. Particles JS কনফিগারেশন (ব্যাকগ্রাউন্ড ইফেক্ট) ---
+if (typeof particlesJS !== 'undefined' && document.getElementById('particles-js')) {
     particlesJS("particles-js", {
         "particles": {
-            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+            "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
             "color": { "value": "#00ff88" },
             "shape": { "type": "circle" },
-            "opacity": { "value": 0.5, "random": true },
+            "opacity": { "value": 0.4, "random": true },
             "size": { "value": 3, "random": true },
             "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.2, "width": 1 },
-            "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+            "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
         },
         "interactivity": {
             "detect_on": "canvas",
-            "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
+            "events": { 
+                "onhover": { "enable": true, "mode": "grab" }, 
+                "onclick": { "enable": true, "mode": "push" } 
+            }
         },
         "retina_detect": true
     });
 }
 
-// --- 7. Page Initializer ---
+// --- ৮. ইনিশিয়ালাইজেশন ---
 document.addEventListener("DOMContentLoaded", () => {
+    // পেজ লোড হওয়ার ১ সেকেন্ড পর টাইপিং শুরু হবে
     setTimeout(typeEffect, 1000);
 });
